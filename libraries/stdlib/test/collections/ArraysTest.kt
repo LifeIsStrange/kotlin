@@ -822,6 +822,20 @@ class ArraysTest {
         assertEquals(5, intsAsList[1])
         ints[1] = 10
         assertEquals(10, intsAsList[1], "Should reflect changes in original array")
+
+        fun <T> testTotalOrder(expected: List<T>, actual: List<T>, element: T) {
+            assertEquals(expected.contains(element), actual.contains(element))
+            assertEquals(expected.indexOf(element), actual.indexOf(element))
+            assertEquals(expected.lastIndexOf(element), actual.lastIndexOf(element))
+        }
+
+        testTotalOrder(listOf(Float.NaN), floatArrayOf(Float.NaN).asList(), Float.NaN)
+        testTotalOrder(listOf(-0.0f), floatArrayOf(-0.0f).asList(), -0.0f)
+        testTotalOrder(listOf(0.0f), floatArrayOf(0.0f).asList(), 0.0f)
+
+        testTotalOrder(listOf(Double.NaN), doubleArrayOf(Double.NaN).asList(), Double.NaN)
+        testTotalOrder(listOf(-0.0), doubleArrayOf(-0.0).asList(), -0.0)
+        testTotalOrder(listOf(0.0), doubleArrayOf(0.0).asList(), 0.0)
     }
 
     @Test fun toPrimitiveArray() {

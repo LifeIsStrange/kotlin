@@ -1467,16 +1467,26 @@ object ArrayOps : TemplateGroupBase() {
             body { """return ArrayList<T>(this.unsafeCast<Array<Any?>>())""" }
         }
 
-        val objectLiteralImpl = """
-                        return object : AbstractList<T>(), RandomAccess {
-                            override val size: Int get() = this@asList.size
-                            override fun isEmpty(): Boolean = this@asList.isEmpty()
-                            override fun contains(element: T): Boolean = this@asList.contains(element)
-                            override fun get(index: Int): T = this@asList[index]
-                            override fun indexOf(element: T): Int = this@asList.indexOf(element)
-                            override fun lastIndexOf(element: T): Int = this@asList.lastIndexOf(element)
-                        }
-                        """
+        val objectLiteralImpl = if (primitive in PrimitiveType.floatingPointPrimitives) """
+            return object : AbstractList<T>(), RandomAccess {
+                override val size: Int get() = this@asList.size
+                override fun isEmpty(): Boolean = this@asList.isEmpty()
+                override fun contains(element: T): Boolean = this@asList.any { it.compareTo(element) == 0 }
+                override fun get(index: Int): T = this@asList[index]
+                override fun indexOf(element: T): Int = this@asList.indexOfFirst { it.compareTo(element) == 0 }
+                override fun lastIndexOf(element: T): Int = this@asList.indexOfLast { it.compareTo(element) == 0 }
+            }
+            """
+        else """
+            return object : AbstractList<T>(), RandomAccess {
+                override val size: Int get() = this@asList.size
+                override fun isEmpty(): Boolean = this@asList.isEmpty()
+                override fun contains(element: T): Boolean = this@asList.contains(element)
+                override fun get(index: Int): T = this@asList[index]
+                override fun indexOf(element: T): Int = this@asList.indexOf(element)
+                override fun lastIndexOf(element: T): Int = this@asList.lastIndexOf(element)
+            }
+            """
         specialFor(ArraysOfPrimitives, ArraysOfUnsigned) {
             on(Platform.JVM) {
                 body { objectLiteralImpl }
