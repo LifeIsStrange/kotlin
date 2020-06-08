@@ -27,6 +27,10 @@ object Elements : TemplateGroupBase() {
         }
     }
 
+    private fun floatingSearchDeprecationMessage(replacement: String): String {
+        return "It is ambiguous what comparison is used, IEEE 754 or total order. Use $replacement instead to explicitly indicate how to compare."
+    }
+
     val f_contains = fn("contains(element: T)") {
         include(Iterables, Sequences, ArraysOfObjects, ArraysOfPrimitives)
     } builder {
@@ -34,12 +38,16 @@ object Elements : TemplateGroupBase() {
 
         doc { "Returns `true` if [element] is found in the ${f.collection}." }
         typeParam("@kotlin.internal.OnlyInputTypes T")
+        if (f == ArraysOfPrimitives && primitive!!.isFloatingPoint()) {
+            deprecate(Deprecation(floatingSearchDeprecationMessage("any(predicate)"), "any { it == element }", DeprecationLevel.WARNING))
+            annotation("""@Suppress("DEPRECATION")""")
+        }
         returns("Boolean")
         body(Iterables) {
             """
-                if (this is Collection)
-                    return contains(element)
-                return indexOf(element) >= 0
+            if (this is Collection)
+                return contains(element)
+            return indexOf(element) >= 0
             """
         }
         body(ArraysOfPrimitives, ArraysOfObjects, Sequences) {
@@ -56,6 +64,9 @@ object Elements : TemplateGroupBase() {
         typeParam("@kotlin.internal.OnlyInputTypes T")
         specialFor(Lists) {
             annotation("""@Suppress("EXTENSION_SHADOWED_BY_MEMBER") // false warning, extension takes precedence in some cases""")
+        }
+        if (f == ArraysOfPrimitives && primitive!!.isFloatingPoint()) {
+            deprecate(Deprecation(floatingSearchDeprecationMessage("indexOfFirst"), "indexOfFirst { it == element }", DeprecationLevel.WARNING))
         }
         returns("Int")
         body {
@@ -116,6 +127,9 @@ object Elements : TemplateGroupBase() {
         typeParam("@kotlin.internal.OnlyInputTypes T")
         specialFor(Lists) {
             annotation("""@Suppress("EXTENSION_SHADOWED_BY_MEMBER") // false warning, extension takes precedence in some cases""")
+        }
+        if (f == ArraysOfPrimitives && primitive!!.isFloatingPoint()) {
+            deprecate(Deprecation(floatingSearchDeprecationMessage("indexOfLast"), "indexOfLast { it == element }", DeprecationLevel.WARNING))
         }
         returns("Int")
         body {

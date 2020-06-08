@@ -550,6 +550,8 @@ public operator fun LongArray.contains(element: Long): Boolean {
 /**
  * Returns `true` if [element] is found in the array.
  */
+@Deprecated("It is ambiguous what comparison is used, IEEE 754 or total order. Use any(predicate) instead to explicitly indicate how to compare.", ReplaceWith("any { it == element }"))
+@Suppress("DEPRECATION")
 public operator fun FloatArray.contains(element: Float): Boolean {
     return indexOf(element) >= 0
 }
@@ -557,6 +559,8 @@ public operator fun FloatArray.contains(element: Float): Boolean {
 /**
  * Returns `true` if [element] is found in the array.
  */
+@Deprecated("It is ambiguous what comparison is used, IEEE 754 or total order. Use any(predicate) instead to explicitly indicate how to compare.", ReplaceWith("any { it == element }"))
+@Suppress("DEPRECATION")
 public operator fun DoubleArray.contains(element: Double): Boolean {
     return indexOf(element) >= 0
 }
@@ -1474,6 +1478,7 @@ public fun LongArray.indexOf(element: Long): Int {
 /**
  * Returns first index of [element], or -1 if the array does not contain element.
  */
+@Deprecated("It is ambiguous what comparison is used, IEEE 754 or total order. Use indexOfFirst instead to explicitly indicate how to compare.", ReplaceWith("indexOfFirst { it == element }"))
 public fun FloatArray.indexOf(element: Float): Int {
     for (index in indices) {
         if (element == this[index]) {
@@ -1486,6 +1491,7 @@ public fun FloatArray.indexOf(element: Float): Int {
 /**
  * Returns first index of [element], or -1 if the array does not contain element.
  */
+@Deprecated("It is ambiguous what comparison is used, IEEE 754 or total order. Use indexOfFirst instead to explicitly indicate how to compare.", ReplaceWith("indexOfFirst { it == element }"))
 public fun DoubleArray.indexOf(element: Double): Int {
     for (index in indices) {
         if (element == this[index]) {
@@ -2004,6 +2010,7 @@ public fun LongArray.lastIndexOf(element: Long): Int {
 /**
  * Returns last index of [element], or -1 if the array does not contain element.
  */
+@Deprecated("It is ambiguous what comparison is used, IEEE 754 or total order. Use indexOfLast instead to explicitly indicate how to compare.", ReplaceWith("indexOfLast { it == element }"))
 public fun FloatArray.lastIndexOf(element: Float): Int {
     for (index in indices.reversed()) {
         if (element == this[index]) {
@@ -2016,6 +2023,7 @@ public fun FloatArray.lastIndexOf(element: Float): Int {
 /**
  * Returns last index of [element], or -1 if the array does not contain element.
  */
+@Deprecated("It is ambiguous what comparison is used, IEEE 754 or total order. Use indexOfLast instead to explicitly indicate how to compare.", ReplaceWith("indexOfLast { it == element }"))
 public fun DoubleArray.lastIndexOf(element: Double): Int {
     for (index in indices.reversed()) {
         if (element == this[index]) {

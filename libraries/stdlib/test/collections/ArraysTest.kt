@@ -524,16 +524,6 @@ class ArraysTest {
         expect(1) { longArrayOf(1, 2, 3).indexOf(2) }
         expect(2) { longArrayOf(1, 2, 3).indexOf(3) }
 
-        expect(-1) { floatArrayOf(1.0f, 2.0f, 3.0f).indexOf(0f) }
-        expect(0) { floatArrayOf(1.0f, 2.0f, 3.0f).indexOf(1.0f) }
-        expect(1) { floatArrayOf(1.0f, 2.0f, 3.0f).indexOf(2.0f) }
-        expect(2) { floatArrayOf(1.0f, 2.0f, 3.0f).indexOf(3.0f) }
-
-        expect(-1) { doubleArrayOf(1.0, 2.0, 3.0).indexOf(0.0) }
-        expect(0) { doubleArrayOf(1.0, 2.0, 3.0).indexOf(1.0) }
-        expect(1) { doubleArrayOf(1.0, 2.0, 3.0).indexOf(2.0) }
-        expect(2) { doubleArrayOf(1.0, 2.0, 3.0).indexOf(3.0) }
-
         expect(-1) { charArrayOf('a', 'b', 'c').indexOf('z') }
         expect(0) { charArrayOf('a', 'b', 'c').indexOf('a') }
         expect(1) { charArrayOf('a', 'b', 'c').indexOf('b') }
@@ -542,6 +532,53 @@ class ArraysTest {
         expect(0) { booleanArrayOf(true, false).indexOf(true) }
         expect(1) { booleanArrayOf(true, false).indexOf(false) }
         expect(-1) { booleanArrayOf(true).indexOf(false) }
+    }
+
+    @Suppress("DEPRECATION", "ConvertNaNEquality")
+    @Test fun indexOfInFloatingPrimitiveArrays() {
+        expect(-1) { floatArrayOf(1.0f, 2.0f, 3.0f).indexOf(0f) }
+        expect(0) { floatArrayOf(1.0f, 2.0f, 3.0f).indexOf(1.0f) }
+        expect(1) { floatArrayOf(1.0f, 2.0f, 3.0f).indexOf(2.0f) }
+        expect(2) { floatArrayOf(1.0f, 2.0f, 3.0f).indexOf(3.0f) }
+        expect(0, "0.0f == 0.0f") { floatArrayOf(0.0f, Float.NaN).indexOf(0.0f) }
+        expect(0, "-0.0f == 0.0f") { floatArrayOf(-0.0f, Float.NaN).indexOf(0.0f) }
+        expect(0, "0.0f == -0.0f") { floatArrayOf(0.0f, Float.NaN).indexOf(-0.0f) }
+        expect(0, "-0.0f == -0.0f") { floatArrayOf(-0.0f, Float.NaN).indexOf(-0.0f) }
+        expect(-1, "Float.NaN != Float.NaN") { floatArrayOf(0.0f, -0.0f, Float.NaN).indexOf(Float.NaN) }
+
+        expect(0, "0.0f == 0.0f") { floatArrayOf(0.0f, Float.NaN).indexOfFirst { it == 0.0f } }
+        expect(0, "-0.0f == 0.0f") { floatArrayOf(-0.0f, Float.NaN).indexOfFirst { it == 0.0f } }
+        expect(0, "0.0f == -0.0f") { floatArrayOf(0.0f, Float.NaN).indexOfFirst { it == -0.0f } }
+        expect(0, "-0.0f == -0.0f") { floatArrayOf(-0.0f, Float.NaN).indexOfFirst { it == -0.0f } }
+        expect(-1, "Float.NaN != Float.NaN") { floatArrayOf(0.0f, -0.0f, Float.NaN).indexOfFirst { it == Float.NaN } }
+
+        expect(0, "0.0f.compareTo(0.0f) == 0") { floatArrayOf(0.0f, Float.NaN).indexOfFirst { it.compareTo(0.0f) == 0 } }
+        expect(-1, "(-0.0f).compareTo(0.0f) != 0") { floatArrayOf(-0.0f, Float.NaN).indexOfFirst { it.compareTo(0.0f) == 0 } }
+        expect(-1, "0.0f.compareTo(-0.0f) != 0") { floatArrayOf(0.0f, Float.NaN).indexOfFirst { it.compareTo(-0.0f) == 0 } }
+        expect(0, "(-0.0f).compareTo(-0.0f) == 0") { floatArrayOf(-0.0f, Float.NaN).indexOfFirst { it.compareTo(-0.0f) == 0 } }
+        expect(2, "Float.NaN.compareTo(Float.NaN) == 0") { floatArrayOf(0.0f, -0.0f, Float.NaN).indexOfFirst { it.compareTo(Float.NaN) == 0 } }
+
+        expect(-1) { doubleArrayOf(1.0, 2.0, 3.0).indexOf(0.0) }
+        expect(0) { doubleArrayOf(1.0, 2.0, 3.0).indexOf(1.0) }
+        expect(1) { doubleArrayOf(1.0, 2.0, 3.0).indexOf(2.0) }
+        expect(2) { doubleArrayOf(1.0, 2.0, 3.0).indexOf(3.0) }
+        expect(0, "0.0 == 0.0") { doubleArrayOf(0.0, Double.NaN).indexOf(0.0) }
+        expect(0, "-0.0 == 0.0") { doubleArrayOf(-0.0, Double.NaN).indexOf(0.0) }
+        expect(0, "0.0 == -0.0") { doubleArrayOf(0.0, Double.NaN).indexOf(-0.0) }
+        expect(0, "-0.0 == -0.0") { doubleArrayOf(-0.0, Double.NaN).indexOf(-0.0) }
+        expect(-1, "Double.NaN != Double.NaN") { doubleArrayOf(0.0, -0.0, Double.NaN).indexOf(Double.NaN) }
+
+        expect(0, "0.0 == 0.0") { doubleArrayOf(0.0, Double.NaN).indexOfFirst { it == 0.0 } }
+        expect(0, "-0.0 == 0.0") { doubleArrayOf(-0.0, Double.NaN).indexOfFirst { it == 0.0 } }
+        expect(0, "0.0 == -0.0") { doubleArrayOf(0.0, Double.NaN).indexOfFirst { it == -0.0 } }
+        expect(0, "-0.0 == -0.0") { doubleArrayOf(-0.0, Double.NaN).indexOfFirst { it == -0.0 } }
+        expect(-1, "Double.NaN != Double.NaN") { doubleArrayOf(0.0, -0.0, Double.NaN).indexOfFirst { it == Double.NaN } }
+
+        expect(0, "0.0.compareTo(0.0) == 0") { doubleArrayOf(0.0, Double.NaN).indexOfFirst { it.compareTo(0.0) == 0 } }
+        expect(-1, "(-0.0).compareTo(0.0) != 0") { doubleArrayOf(-0.0, Double.NaN).indexOfFirst { it.compareTo(0.0) == 0 } }
+        expect(-1, "0.0.compareTo(-0.0) != 0") { doubleArrayOf(0.0, Double.NaN).indexOfFirst { it.compareTo(-0.0) == 0 } }
+        expect(0, "(-0.0).compareTo(-0.0) == 0") { doubleArrayOf(-0.0, Double.NaN).indexOfFirst { it.compareTo(-0.0) == 0 } }
+        expect(2, "Double.NaN.compareTo(Double.NaN) == 0") { doubleArrayOf(0.0, -0.0, Double.NaN).indexOfFirst { it.compareTo(Double.NaN) == 0 } }
     }
 
     @Test fun indexOf() {
