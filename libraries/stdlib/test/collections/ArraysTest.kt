@@ -12,7 +12,6 @@ import test.assertTypeEquals
 import test.collections.behaviors.*
 import test.comparisons.STRING_CASE_INSENSITIVE_ORDER
 import test.text.isAsciiLetter
-import kotlin.math.exp
 import kotlin.test.*
 import kotlin.random.Random
 
@@ -581,6 +580,53 @@ class ArraysTest {
         expect(2, "Double.NaN.compareTo(Double.NaN) == 0") { doubleArrayOf(0.0, -0.0, Double.NaN).indexOfFirst { it.compareTo(Double.NaN) == 0 } }
     }
 
+    @Suppress("DEPRECATION", "ConvertNaNEquality")
+    @Test fun lastIndexOfInFloatingPrimitiveArrays() {
+        expect(-1) { floatArrayOf(1.0f, 2.0f, 3.0f).lastIndexOf(0f) }
+        expect(0) { floatArrayOf(1.0f, 2.0f, 3.0f).lastIndexOf(1.0f) }
+        expect(1) { floatArrayOf(1.0f, 2.0f, 3.0f).lastIndexOf(2.0f) }
+        expect(2) { floatArrayOf(1.0f, 2.0f, 3.0f).lastIndexOf(3.0f) }
+        expect(0, "0.0f == 0.0f") { floatArrayOf(0.0f, Float.NaN).lastIndexOf(0.0f) }
+        expect(0, "-0.0f == 0.0f") { floatArrayOf(-0.0f, Float.NaN).lastIndexOf(0.0f) }
+        expect(0, "0.0f == -0.0f") { floatArrayOf(0.0f, Float.NaN).lastIndexOf(-0.0f) }
+        expect(0, "-0.0f == -0.0f") { floatArrayOf(-0.0f, Float.NaN).lastIndexOf(-0.0f) }
+        expect(-1, "Float.NaN != Float.NaN") { floatArrayOf(0.0f, -0.0f, Float.NaN).lastIndexOf(Float.NaN) }
+
+        expect(0, "0.0f == 0.0f") { floatArrayOf(0.0f, Float.NaN).indexOfLast { it == 0.0f } }
+        expect(0, "-0.0f == 0.0f") { floatArrayOf(-0.0f, Float.NaN).indexOfLast { it == 0.0f } }
+        expect(0, "0.0f == -0.0f") { floatArrayOf(0.0f, Float.NaN).indexOfLast { it == -0.0f } }
+        expect(0, "-0.0f == -0.0f") { floatArrayOf(-0.0f, Float.NaN).indexOfLast { it == -0.0f } }
+        expect(-1, "Float.NaN != Float.NaN") { floatArrayOf(0.0f, -0.0f, Float.NaN).indexOfLast { it == Float.NaN } }
+
+        expect(0, "0.0f.compareTo(0.0f) == 0") { floatArrayOf(0.0f, Float.NaN).indexOfLast { it.compareTo(0.0f) == 0 } }
+        expect(-1, "(-0.0f).compareTo(0.0f) != 0") { floatArrayOf(-0.0f, Float.NaN).indexOfLast { it.compareTo(0.0f) == 0 } }
+        expect(-1, "0.0f.compareTo(-0.0f) != 0") { floatArrayOf(0.0f, Float.NaN).indexOfLast { it.compareTo(-0.0f) == 0 } }
+        expect(0, "(-0.0f).compareTo(-0.0f) == 0") { floatArrayOf(-0.0f, Float.NaN).indexOfLast { it.compareTo(-0.0f) == 0 } }
+        expect(2, "Float.NaN.compareTo(Float.NaN) == 0") { floatArrayOf(0.0f, -0.0f, Float.NaN).indexOfLast { it.compareTo(Float.NaN) == 0 } }
+
+        expect(-1) { doubleArrayOf(1.0, 2.0, 3.0).lastIndexOf(0.0) }
+        expect(0) { doubleArrayOf(1.0, 2.0, 3.0).lastIndexOf(1.0) }
+        expect(1) { doubleArrayOf(1.0, 2.0, 3.0).lastIndexOf(2.0) }
+        expect(2) { doubleArrayOf(1.0, 2.0, 3.0).lastIndexOf(3.0) }
+        expect(0, "0.0 == 0.0") { doubleArrayOf(0.0, Double.NaN).lastIndexOf(0.0) }
+        expect(0, "-0.0 == 0.0") { doubleArrayOf(-0.0, Double.NaN).lastIndexOf(0.0) }
+        expect(0, "0.0 == -0.0") { doubleArrayOf(0.0, Double.NaN).lastIndexOf(-0.0) }
+        expect(0, "-0.0 == -0.0") { doubleArrayOf(-0.0, Double.NaN).lastIndexOf(-0.0) }
+        expect(-1, "Double.NaN != Double.NaN") { doubleArrayOf(0.0, -0.0, Double.NaN).lastIndexOf(Double.NaN) }
+
+        expect(0, "0.0 == 0.0") { doubleArrayOf(0.0, Double.NaN).indexOfLast { it == 0.0 } }
+        expect(0, "-0.0 == 0.0") { doubleArrayOf(-0.0, Double.NaN).indexOfLast { it == 0.0 } }
+        expect(0, "0.0 == -0.0") { doubleArrayOf(0.0, Double.NaN).indexOfLast { it == -0.0 } }
+        expect(0, "-0.0 == -0.0") { doubleArrayOf(-0.0, Double.NaN).indexOfLast { it == -0.0 } }
+        expect(-1, "Double.NaN != Double.NaN") { doubleArrayOf(0.0, -0.0, Double.NaN).indexOfLast { it == Double.NaN } }
+
+        expect(0, "0.0.compareTo(0.0) == 0") { doubleArrayOf(0.0, Double.NaN).indexOfLast { it.compareTo(0.0) == 0 } }
+        expect(-1, "(-0.0).compareTo(0.0) != 0") { doubleArrayOf(-0.0, Double.NaN).indexOfLast { it.compareTo(0.0) == 0 } }
+        expect(-1, "0.0.compareTo(-0.0) != 0") { doubleArrayOf(0.0, Double.NaN).indexOfLast { it.compareTo(-0.0) == 0 } }
+        expect(0, "(-0.0).compareTo(-0.0) == 0") { doubleArrayOf(-0.0, Double.NaN).indexOfLast { it.compareTo(-0.0) == 0 } }
+        expect(2, "Double.NaN.compareTo(Double.NaN) == 0") { doubleArrayOf(0.0, -0.0, Double.NaN).indexOfLast { it.compareTo(Double.NaN) == 0 } }
+    }
+
     @Test fun indexOf() {
         expect(-1) { arrayOf("cat", "dog", "bird").indexOf("mouse") }
         expect(0) { arrayOf("cat", "dog", "bird").indexOf("cat") }
@@ -750,6 +796,53 @@ class ArraysTest {
         assertTrue(arrayOf("1", "2", "3", "4").contains("2"))
         assertTrue("3" in arrayOf("1", "2", "3", "4"))
         assertTrue("0" !in arrayOf("1", "2", "3", "4"))
+    }
+
+    @Suppress("DEPRECATION", "ConvertNaNEquality")
+    @Test fun containsInFloatingPrimitiveArrays() {
+        assertFalse { floatArrayOf(1.0f, 2.0f, 3.0f).contains(0f) }
+        assertTrue { floatArrayOf(1.0f, 2.0f, 3.0f).contains(1.0f) }
+        assertTrue { floatArrayOf(1.0f, 2.0f, 3.0f).contains(2.0f) }
+        assertTrue { floatArrayOf(1.0f, 2.0f, 3.0f).contains(3.0f) }
+        assertTrue("0.0f == 0.0f") { floatArrayOf(0.0f, Float.NaN).contains(0.0f) }
+        assertTrue("-0.0f == 0.0f") { floatArrayOf(-0.0f, Float.NaN).contains(0.0f) }
+        assertTrue("0.0f == -0.0f") { floatArrayOf(0.0f, Float.NaN).contains(-0.0f) }
+        assertTrue("-0.0f == -0.0f") { floatArrayOf(-0.0f, Float.NaN).contains(-0.0f) }
+        assertFalse("Float.NaN != Float.NaN") { floatArrayOf(0.0f, -0.0f, Float.NaN).contains(Float.NaN) }
+
+        assertTrue("0.0f == 0.0f") { floatArrayOf(0.0f, Float.NaN).any { it == 0.0f } }
+        assertTrue("-0.0f == 0.0f") { floatArrayOf(-0.0f, Float.NaN).any { it == 0.0f } }
+        assertTrue("0.0f == -0.0f") { floatArrayOf(0.0f, Float.NaN).any { it == -0.0f } }
+        assertTrue("-0.0f == -0.0f") { floatArrayOf(-0.0f, Float.NaN).any { it == -0.0f } }
+        assertFalse("Float.NaN != Float.NaN") { floatArrayOf(0.0f, -0.0f, Float.NaN).any { it == Float.NaN } }
+
+        assertTrue("0.0f.compareTo(0.0f) == 0") { floatArrayOf(0.0f, Float.NaN).any { it.compareTo(0.0f) == 0 } }
+        assertFalse("(-0.0f).compareTo(0.0f) != 0") { floatArrayOf(-0.0f, Float.NaN).any { it.compareTo(0.0f) == 0 } }
+        assertFalse("0.0f.compareTo(-0.0f) != 0") { floatArrayOf(0.0f, Float.NaN).any { it.compareTo(-0.0f) == 0 } }
+        assertTrue("(-0.0f).compareTo(-0.0f) == 0") { floatArrayOf(-0.0f, Float.NaN).any { it.compareTo(-0.0f) == 0 } }
+        assertTrue("Float.NaN.compareTo(Float.NaN) == 0") { floatArrayOf(0.0f, -0.0f, Float.NaN).any { it.compareTo(Float.NaN) == 0 } }
+
+        assertFalse { doubleArrayOf(1.0, 2.0, 3.0).contains(0.0) }
+        assertTrue { doubleArrayOf(1.0, 2.0, 3.0).contains(1.0) }
+        assertTrue { doubleArrayOf(1.0, 2.0, 3.0).contains(2.0) }
+        assertTrue { doubleArrayOf(1.0, 2.0, 3.0).contains(3.0) }
+        assertTrue("0.0 == 0.0") { doubleArrayOf(0.0, Double.NaN).contains(0.0) }
+        assertTrue("-0.0 == 0.0") { doubleArrayOf(-0.0, Double.NaN).contains(0.0) }
+        assertTrue("0.0 == -0.0") { doubleArrayOf(0.0, Double.NaN).contains(-0.0) }
+        assertTrue("-0.0 == -0.0") { doubleArrayOf(-0.0, Double.NaN).contains(-0.0) }
+        assertFalse("Double.NaN != Double.NaN") { doubleArrayOf(0.0, -0.0, Double.NaN).contains(Double.NaN) }
+
+        assertTrue("0.0 == 0.0") { doubleArrayOf(0.0, Double.NaN).any { it == 0.0 } }
+        assertTrue("-0.0 == 0.0") { doubleArrayOf(-0.0, Double.NaN).any { it == 0.0 } }
+        assertTrue("0.0 == -0.0") { doubleArrayOf(0.0, Double.NaN).any { it == -0.0 } }
+        assertTrue("-0.0 == -0.0") { doubleArrayOf(-0.0, Double.NaN).any { it == -0.0 } }
+        assertFalse("Double.NaN != Double.NaN") { doubleArrayOf(0.0, -0.0, Double.NaN).any { it == Double.NaN } }
+
+        assertTrue("0.0.compareTo(0.0) == 0") { doubleArrayOf(0.0, Double.NaN).any { it.compareTo(0.0) == 0 } }
+        assertFalse("(-0.0).compareTo(0.0) != 0") { doubleArrayOf(-0.0, Double.NaN).any { it.compareTo(0.0) == 0 } }
+        assertFalse("0.0.compareTo(-0.0) != 0") { doubleArrayOf(0.0, Double.NaN).any { it.compareTo(-0.0) == 0 } }
+        assertTrue("(-0.0).compareTo(-0.0) == 0") { doubleArrayOf(-0.0, Double.NaN).any { it.compareTo(-0.0) == 0 } }
+        assertTrue("Double.NaN.compareTo(Double.NaN) == 0") { doubleArrayOf(0.0, -0.0, Double.NaN).any { it.compareTo(Double.NaN) == 0 } }
     }
 
     @Test fun slice() {
