@@ -18,7 +18,7 @@ public final class Test$b$1 {
 
 @kotlin.Metadata
 final class Test$b$2 {
-    public final static field INSTANCE: Test$b$2
+    public final static @org.jetbrains.annotations.NotNull field INSTANCE: Test$b$2
     inner class Test$b$2
     static method <clinit>(): void
     method <init>(): void

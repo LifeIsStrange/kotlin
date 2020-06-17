@@ -771,9 +771,12 @@ public class ImplementationBodyCodegen extends ClassBodyCodegen {
 
         if (isNonCompanionObject(descriptor)) {
             StackValue.Field field = StackValue.createSingletonViaInstance(descriptor, typeMapper, INSTANCE_FIELD);
-            v.newField(JvmDeclarationOriginKt.OtherOriginFromPure(myClass),
-                       ACC_PUBLIC | ACC_STATIC | ACC_FINAL,
-                       field.name, field.type.getDescriptor(), null, null);
+            FieldVisitor fv = v.newField(
+                    JvmDeclarationOriginKt.OtherOriginFromPure(myClass),
+                    ACC_PUBLIC | ACC_STATIC | ACC_FINAL,
+                    field.name, field.type.getDescriptor(), null, null
+            );
+            fv.visitAnnotation(Type.getDescriptor(NotNull.class), false).visitEnd();
 
             return;
         }
@@ -816,8 +819,11 @@ public class ImplementationBodyCodegen extends ClassBodyCodegen {
             fieldAccessFlags |= ACC_SYNTHETIC;
         }
         StackValue.Field field = StackValue.singleton(companionObjectDescriptor, typeMapper);
-        FieldVisitor fv = v.newField(JvmDeclarationOriginKt.OtherOrigin(companionObject == null ? myClass.getPsiOrParent() : companionObject),
-                                     fieldAccessFlags, field.name, field.type.getDescriptor(), null, null);
+        FieldVisitor fv = v.newField(
+                JvmDeclarationOriginKt.OtherOrigin(companionObject == null ? myClass.getPsiOrParent() : companionObject),
+                fieldAccessFlags, field.name, field.type.getDescriptor(), null, null
+        );
+        fv.visitAnnotation(Type.getDescriptor(NotNull.class), false).visitEnd();
         if (fieldShouldBeDeprecated) {
             AnnotationCodegen.forField(fv, this, state).visitAnnotation("Ljava/lang/Deprecated;", true).visitEnd();
         }
