@@ -55,20 +55,22 @@ class GradleScriptNotificationProvider(private val project: Project) :
             notEvaluatedInLastImport -> EditorNotificationPanel().apply {
                 text(KotlinIdeaGradleBundle.message("notification.notEvaluatedInLastImport.text"))
 
+                // todo: this actions will be usefull only when gradle fix https://github.com/gradle/gradle/issues/12640
                 // suggest to reimport project if something changed after import
-                val importTs = (scriptUnderRoot.nearest as? Imported)?.data?.importTs
-                if (importTs != null && !scriptUnderRoot.nearest.areRelatedFilesChangedBefore(file, importTs)) {
-                    createActionLabel(getMissingConfigurationActionText()) {
-                        rootsManager.updateStandaloneScripts {
-                            runPartialGradleImport(project)
-                        }
-                    }
-                }
+//                val importTs = (scriptUnderRoot.nearest as? Imported)?.data?.importTs
+//                if (importTs != null && !scriptUnderRoot.nearest.areRelatedFilesChangedBefore(file, importTs)) {
+//                    createActionLabel(getMissingConfigurationActionText()) {
+//                        rootsManager.updateStandaloneScripts {
+//                            runPartialGradleImport(project)
+//                        }
+//                    }
+//                }
 
+                // todo: this actions will be usefull only when gradle fix https://github.com/gradle/gradle/issues/12640
                 // suggest to choose new gradle project
-                createActionLabel(KotlinIdeaGradleBundle.message("notification.outsideAnything.linkAction")) {
-                    linkProject(project)
-                }
+//                createActionLabel(KotlinIdeaGradleBundle.message("notification.outsideAnything.linkAction")) {
+//                    linkProject(project)
+//                }
 
                 createActionLabel(KotlinIdeaGradleBundle.message("notification.notEvaluatedInLastImport.addAsStandaloneAction")) {
                     rootsManager.updateStandaloneScripts {
