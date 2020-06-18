@@ -54,7 +54,7 @@ class CocoaPodsIT : BaseGradleIT() {
             val podspecFileName = "kotlin-library/kotlin_library.podspec"
 
 
-            frameworkName?.let {
+            frameworkName?.also {
                 fileInWorkingDir(podspecFileName).modify {
                     it.replace("build/cocoapods/framework/kotlin_library.framework", "build/cocoapods/framework/$frameworkName.framework")
                 }
@@ -69,15 +69,12 @@ class CocoaPodsIT : BaseGradleIT() {
                     spec.authors                  = ''
                     spec.license                  = ''
                     spec.summary                  = 'CocoaPods test library'
-
                     spec.static_framework         = true
                     spec.vendored_frameworks      = "build/cocoapods/framework/${frameworkName ?: "kotlin_library"}.framework"
                     spec.libraries                = "c++"
                     spec.module_name              = "#{spec.name}_umbrella"
-
                     spec.dependency 'pod_dependency', '1.0'
                     spec.dependency 'subspec_dependency/Core', '1.0'
-
                     spec.pod_target_xcconfig = {
                         'KOTLIN_TARGET[sdk=iphonesimulator*]' => 'ios_x64',
                         'KOTLIN_TARGET[sdk=iphoneos*]' => 'ios_arm',
@@ -87,7 +84,6 @@ class CocoaPodsIT : BaseGradleIT() {
                         'KOTLIN_TARGET[sdk=appletvos*]' => 'tvos_arm64',
                         'KOTLIN_TARGET[sdk=macosx*]' => 'macos_x64'
                     }
-
                     spec.script_phases = [
                         {
                             :name => 'Build kotlin_library',
@@ -109,7 +105,12 @@ class CocoaPodsIT : BaseGradleIT() {
             """.trimIndent()
 
             assertFileExists(podspecFileName)
-            assertEquals(expectedPodspecContent, fileInWorkingDir(podspecFileName).readText())
+            val actualPodspecContentWithoutBlankLines = fileInWorkingDir(podspecFileName).readText()
+                .lineSequence()
+                .filter { it.isNotBlank() }
+                .joinToString("\n")
+
+            assertEquals(expectedPodspecContent, actualPodspecContentWithoutBlankLines)
         }
     }
 

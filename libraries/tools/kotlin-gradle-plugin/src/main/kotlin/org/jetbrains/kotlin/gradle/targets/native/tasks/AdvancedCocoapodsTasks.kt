@@ -30,7 +30,7 @@ internal val KotlinNativeTarget.toValidSDK: String
         KonanTarget.WATCHOS_ARM32, KonanTarget.WATCHOS_ARM64 -> "watchos"
         KonanTarget.TVOS_X64 -> "appletvsimulator"
         KonanTarget.TVOS_ARM64 -> "appletvos"
-        KonanTarget.MACOS_X64 -> "macos"
+        KonanTarget.MACOS_X64 -> "macosx"
         else -> throw IllegalArgumentException("Bad target ${konanTarget.name}.")
     }
 

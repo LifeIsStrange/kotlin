@@ -142,10 +142,10 @@ open class PodspecTask : DefaultTask() {
         get() = if (project.rootProject == project) cocoapodsExtension.podfile != null
         else cocoapodsExtension.podfile != null
                 || (
-                project.parent?.tasks?.named(POD_SPEC_TASK_NAME, PodspecTask::class.java)?.get()?.hasPodfileOwnOrParent
-                    ?: false
+                project.parent?.tasks?.findByName(POD_SPEC_TASK_NAME)?.let {
+                    project.parent?.tasks?.named(POD_SPEC_TASK_NAME, PodspecTask::class.java)?.get()?.hasPodfileOwnOrParent
+                } ?: false
                 )
-
 }
 
 
