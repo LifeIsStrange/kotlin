@@ -1804,6 +1804,11 @@ public class FirOldFrontendDiagnosticsTestGenerated extends AbstractFirOldFronte
             runTest("compiler/testData/diagnostics/tests/callableReference/constraintFromLHSWithCorrectDirectionError.kt");
         }
 
+        @TestMetadata("correctCandidateWithCompatibilityForSeveralCandidates.kt")
+        public void testCorrectCandidateWithCompatibilityForSeveralCandidates() throws Exception {
+            runTest("compiler/testData/diagnostics/tests/callableReference/correctCandidateWithCompatibilityForSeveralCandidates.kt");
+        }
+
         @TestMetadata("correctInfoAfterArrayLikeCall.kt")
         public void testCorrectInfoAfterArrayLikeCall() throws Exception {
             runTest("compiler/testData/diagnostics/tests/callableReference/correctInfoAfterArrayLikeCall.kt");
@@ -1972,6 +1977,11 @@ public class FirOldFrontendDiagnosticsTestGenerated extends AbstractFirOldFronte
         @TestMetadata("typealiases.kt")
         public void testTypealiases() throws Exception {
             runTest("compiler/testData/diagnostics/tests/callableReference/typealiases.kt");
+        }
+
+        @TestMetadata("unitAdaptationForReferenceCompatibility.kt")
+        public void testUnitAdaptationForReferenceCompatibility() throws Exception {
+            runTest("compiler/testData/diagnostics/tests/callableReference/unitAdaptationForReferenceCompatibility.kt");
         }
 
         @TestMetadata("unused.kt")
