@@ -14,7 +14,6 @@ import org.jetbrains.kotlin.fir.backend.findMatchingOverriddenSymbolsFromSuperty
 import org.jetbrains.kotlin.fir.backend.toIrType
 import org.jetbrains.kotlin.fir.declarations.*
 import org.jetbrains.kotlin.fir.symbols.Fir2IrSimpleFunctionSymbol
-import org.jetbrains.kotlin.fir.symbols.impl.FirNamedFunctionSymbol
 import org.jetbrains.kotlin.ir.ObsoleteDescriptorBasedAPI
 import org.jetbrains.kotlin.ir.declarations.*
 import org.jetbrains.kotlin.ir.declarations.lazy.lazyVar
@@ -49,7 +48,7 @@ class Fir2IrLazySimpleFunction(
         get() = fir.isSuspend
 
     override val isFakeOverride: Boolean
-        get() = (fir.symbol as? FirNamedFunctionSymbol)?.isFakeOverride == true
+        get() = origin == IrDeclarationOrigin.FAKE_OVERRIDE
 
     override val isOperator: Boolean
         get() = fir.isOperator
