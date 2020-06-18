@@ -27,8 +27,8 @@ object Elements : TemplateGroupBase() {
         }
     }
 
-    private fun floatingSearchDeprecationMessage(replacement: String): String {
-        return "It is ambiguous what comparison is used, IEEE 754 or total order. Use $replacement instead to explicitly indicate how to compare."
+    private fun floatingSearchDeprecationMessage(signature: String, replacement: String): String {
+        return "The function has unclear behavior when searching for NaN or zero values and will be removed soon. Use '$replacement' instead to continue using this behavior, or '.asList().$signature' to get the same search behavior as in a list."
     }
 
     val f_contains = fn("contains(element: T)") {
@@ -39,7 +39,8 @@ object Elements : TemplateGroupBase() {
         doc { "Returns `true` if [element] is found in the ${f.collection}." }
         typeParam("@kotlin.internal.OnlyInputTypes T")
         if (f == ArraysOfPrimitives && primitive!!.isFloatingPoint()) {
-            deprecate(Deprecation(floatingSearchDeprecationMessage("any(predicate)"), "any { it == element }", DeprecationLevel.WARNING))
+            val replacement = "any { it == element }"
+            deprecate(Deprecation(floatingSearchDeprecationMessage(signature, replacement), replacement, DeprecationLevel.WARNING))
             annotation("""@Suppress("DEPRECATION")""")
         }
         returns("Boolean")
@@ -66,7 +67,8 @@ object Elements : TemplateGroupBase() {
             annotation("""@Suppress("EXTENSION_SHADOWED_BY_MEMBER") // false warning, extension takes precedence in some cases""")
         }
         if (f == ArraysOfPrimitives && primitive!!.isFloatingPoint()) {
-            deprecate(Deprecation(floatingSearchDeprecationMessage("indexOfFirst"), "indexOfFirst { it == element }", DeprecationLevel.WARNING))
+            val replacement = "indexOfFirst { it == element }"
+            deprecate(Deprecation(floatingSearchDeprecationMessage(signature, replacement), replacement, DeprecationLevel.WARNING))
         }
         returns("Int")
         body {
@@ -129,7 +131,8 @@ object Elements : TemplateGroupBase() {
             annotation("""@Suppress("EXTENSION_SHADOWED_BY_MEMBER") // false warning, extension takes precedence in some cases""")
         }
         if (f == ArraysOfPrimitives && primitive!!.isFloatingPoint()) {
-            deprecate(Deprecation(floatingSearchDeprecationMessage("indexOfLast"), "indexOfLast { it == element }", DeprecationLevel.WARNING))
+            val replacement = "indexOfLast { it == element }"
+            deprecate(Deprecation(floatingSearchDeprecationMessage(signature, replacement), replacement, DeprecationLevel.WARNING))
         }
         returns("Int")
         body {
