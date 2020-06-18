@@ -32,7 +32,8 @@ class Fir2IrLazySimpleFunction(
     endOffset: Int,
     origin: IrDeclarationOrigin,
     fir: FirSimpleFunction,
-    symbol: Fir2IrSimpleFunctionSymbol
+    symbol: Fir2IrSimpleFunctionSymbol,
+    override val isFakeOverride: Boolean
 ) : AbstractFir2IrLazyDeclaration<FirSimpleFunction, IrSimpleFunction>(
     components, startOffset, endOffset, origin, fir, symbol
 ), IrSimpleFunction {
@@ -46,9 +47,6 @@ class Fir2IrLazySimpleFunction(
 
     override val isSuspend: Boolean
         get() = fir.isSuspend
-
-    override val isFakeOverride: Boolean
-        get() = origin == IrDeclarationOrigin.FAKE_OVERRIDE
 
     override val isOperator: Boolean
         get() = fir.isOperator
