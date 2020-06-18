@@ -1,11 +1,14 @@
 import org.jetbrains.kotlin.gradle.targets.js.KotlinJsCompilerAttribute
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 import org.gradle.internal.os.OperatingSystem
+import org.gradle.api.attributes.Usage.*
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinUsages
 
 description = "Atomicfu Compiler Plugin"
 
 plugins {
     kotlin("jvm")
+    id("jps-compatible")
 }
 
 val atomicfuClasspath by configurations.creating {
@@ -38,7 +41,7 @@ dependencies {
     compileOnly(project(":js:js.translator"))
     compile(project(":compiler:backend.js"))
 
-    runtime(kotlinStdlib())
+    runtimeOnly(kotlinStdlib())
 
     testCompile(projectTests(":compiler:tests-common"))
     testCompile(projectTests(":js:js.tests"))
@@ -54,7 +57,14 @@ dependencies {
         isTransitive = false
     }
 
-    embedded(project(":kotlinx-atomicfu-runtime")) { isTransitive = false }
+    embedded(project(":kotlinx-atomicfu-runtime")) {
+        isTransitive = false
+        attributes {
+            attribute(KotlinPlatformType.attribute, KotlinPlatformType.js)
+            attribute(KotlinJsCompilerAttribute.jsCompilerAttribute, KotlinJsCompilerAttribute.ir)
+            attribute(Usage.USAGE_ATTRIBUTE, objects.named(KotlinUsages.KOTLIN_RUNTIME))
+        }
+    }
     atomicfuRuntimeForTests(project(":kotlinx-atomicfu-runtime"))  { isTransitive = false }
 
     val currentOs = OperatingSystem.current()
@@ -93,8 +103,6 @@ projectTest(parallel = true) {
     }
     setUpJsBoxTests(jsEnabled = true, jsIrEnabled = true)
 }
-
-apply(from = "$rootDir/gradle/kotlinPluginPublication.gradle.kts")
 
 fun Test.setUpJsBoxTests(jsEnabled: Boolean, jsIrEnabled: Boolean) {
     dependsOn(":dist")

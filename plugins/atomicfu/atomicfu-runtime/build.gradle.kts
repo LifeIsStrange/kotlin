@@ -9,11 +9,6 @@ plugins {
 
 group = "kotlinx.atomicfu"
 
-repositories {
-    mavenLocal()
-    jcenter()
-}
-
 kotlin.sourceSets {
     getByName("main") {
         dependencies {

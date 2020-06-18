@@ -11,12 +11,6 @@ pill {
     variant = 'FULL'
 }
 
-compileJava {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
-    options.fork = false
-}
-
 dependencies {
     compileOnly project(':kotlin-gradle-plugin')
     compileOnly project(':kotlin-gradle-plugin-api')
