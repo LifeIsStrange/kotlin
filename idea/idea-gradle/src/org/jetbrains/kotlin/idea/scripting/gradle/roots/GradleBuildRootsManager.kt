@@ -147,11 +147,15 @@ class GradleBuildRootsManager(val project: Project) : GradleBuildRootsLocator(),
         }
 
         val oldRoot = actualizeBuildRoot(sync.workingDir) ?: return
+
+        if (oldRoot is Legacy) {
+            oldRoot.importing.set(updated)
+            return
+        }
+
         oldRoot.importing.set(updatingCaches)
 
         try {
-            if (oldRoot is Legacy) return
-
             val templateClasspath = GradleScriptDefinitionsContributor.getDefinitionsTemplateClasspath(project)
             val newData = GradleBuildRootData(sync.ts, sync.projectRoots, templateClasspath, sync.models)
             val mergedData = if (sync.failed && oldRoot is Imported) merge(oldRoot.data, newData) else newData
