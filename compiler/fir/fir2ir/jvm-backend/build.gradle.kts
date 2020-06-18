@@ -11,6 +11,7 @@ dependencies {
     compileOnly(project(":compiler:fir:fir2ir"))
     compileOnly(project(":compiler:fir:fir-serialization"))
     compileOnly(project(":compiler:ir.tree"))
+    compileOnly(project(":compiler:ir.interpreter"))
     compileOnly(project(":compiler:backend"))
     compileOnly(project(":compiler:backend.jvm"))
 
